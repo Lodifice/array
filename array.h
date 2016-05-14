@@ -11,7 +11,7 @@
             ++it)
 
 #define __header(array) \
-    ((struct __array_header *) (((void *) array) - sizeof(struct __array_header)))
+    ((struct __array_header *) array - 1)
 
 #define alength(array) \
     (__header(array)->length)
@@ -65,7 +65,7 @@ void *__array_alloc(size_t size, unsigned length) {
     assert(head);
     head->length = length;
     head->allocated = allocated;
-    return ((void *) head) + sizeof *head;
+    return (void *) (head + 1);
 }
 
 void __array_resize(void **array, size_t size, int difference) {
@@ -78,7 +78,7 @@ void __array_resize(void **array, size_t size, int difference) {
         head->allocated = __bump_up(head->length);
         head = realloc(head, sizeof *head + head->allocated * size);
         assert(head);
-        *array = ((void *) head) + sizeof *head;
+        *array = head + 1;
     }
 }
 
