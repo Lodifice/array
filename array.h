@@ -1,3 +1,6 @@
+#ifndef ARRAY_H
+#define ARRAY_H value
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,7 +50,7 @@ struct __array_header {
     unsigned allocated;
 };
 
-unsigned __bump_up(unsigned n) {
+inline unsigned __bump_up(unsigned n) {
     unsigned base = 1;
     --n;
     while (base < sizeof n * 8) {
@@ -59,7 +62,7 @@ unsigned __bump_up(unsigned n) {
     return n;
 }
 
-void *__array_alloc(size_t size, unsigned length) {
+inline void *__array_alloc(size_t size, unsigned length) {
     unsigned allocated = __bump_up(length);
     struct __array_header *head = malloc(sizeof *head + allocated * size);
     assert(head);
@@ -68,7 +71,7 @@ void *__array_alloc(size_t size, unsigned length) {
     return (void *) (head + 1);
 }
 
-void __array_resize(void **array, size_t size, int difference) {
+inline void __array_resize(void **array, size_t size, int difference) {
     if (difference == 0) {
         return;
     }
@@ -82,7 +85,7 @@ void __array_resize(void **array, size_t size, int difference) {
     }
 }
 
-int __array_search(void *array, void *elem, size_t size) {
+inline int __array_search(void *array, void *elem, size_t size) {
     for (unsigned i = 0; i < alength(array) * size; i += size) {
         if (memcmp((char *)array + i, elem, size) == 0) {
             return 1;
@@ -90,3 +93,4 @@ int __array_search(void *array, void *elem, size_t size) {
     }
     return 0;
 }
+#endif /* ifndef ARRAY_H */
