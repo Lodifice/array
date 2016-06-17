@@ -84,7 +84,7 @@ void __array_resize(void **array, size_t size, int difference) {
 
 int __array_search(void *array, void *elem, size_t size) {
     for (unsigned i = 0; i < alength(array) * size; i += size) {
-        if (memcmp(array + i, elem, size) == 0) {
+        if (memcmp((char *)array + i, elem, size) == 0) {
             return 1;
         }
     }
